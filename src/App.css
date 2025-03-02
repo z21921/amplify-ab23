@@ -26,13 +26,15 @@
 .right-column {
   flex: 1;
   max-width: 50%;
-  min-height: 500px;
+  height: 100%;
   background-color: #f8f9fa;
   border-radius: 8px;
   border: 1px dashed #dee2e6;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .right-column::after {
@@ -62,18 +64,19 @@
   }
 }
 
-/* Header and form section - top 2/5 of the left column */
+/* Top section - contains header and form, takes 2/5 of the left column */
 .header-container {
   position: relative;
-  padding: 0 0 0.5rem 0;
+  padding: 0;
   margin: 0;
   text-align: center;
   width: 100%;
-  min-height: 40%; /* Take at least 2/5 of the left column height */
+  height: 35%; /* Reduced to 35% to move everything up */
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Distribute space between elements */
+  justify-content: flex-start; /* Align content to the top */
   box-sizing: border-box;
+  overflow: visible; /* Allow content to overflow if needed */
 }
 
 .logout-button {
@@ -95,11 +98,11 @@
 }
 
 .main-header {
-  font-size: 2.25rem;
+  font-size: 2rem; /* Slightly reduced font size */
   font-weight: bold;
   color: #1a202c;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
 }
 
 .main-header .highlight {
@@ -108,36 +111,38 @@
 
 @media (min-width: 640px) {
   .main-header {
-    font-size: 3.75rem;
+    font-size: 3rem; /* Reduced font size */
   }
 }
 
 .description {
   font-weight: 500;
-  font-size: 1.125rem;
+  font-size: 1rem; /* Slightly reduced font size */
   color: #1a202c;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
   width: 100%;
 }
 
 .form-container {
   width: 100%;
-  margin-top: auto; /* Push to bottom of header container */
-  padding: 0.5rem 1rem;
+  margin-top: 0;
+  padding: 0 1rem;
   box-sizing: border-box;
+  position: relative;
+  top: -15px; /* Move the form up more */
 }
 
 .search-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px; /* Reduced gap */
   align-items: center;
   width: 100%;
 }
 
 .wide-input {
   width: 100%;
-  padding: 10px;
+  padding: 8px; /* Reduced padding */
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -146,7 +151,7 @@
 .search-button {
   width: 100%; /* Make the button full width */
   max-width: 300px; /* Set a maximum width for the button */
-  padding: 10px;
+  padding: 8px; /* Reduced padding */
   font-size: 16px;
   background-color: #007bff;
   color: white;
@@ -160,10 +165,10 @@
 }
 
 .result-container {
-  margin-top: 10px;
+  margin-top: 0;
   flex-grow: 1; /* Take remaining space */
   overflow-y: auto; /* Add scrolling if needed */
-  max-height: 60%; /* Take at most 3/5 of the left column height */
+  height: 65%; /* Increased to 65% to balance the header reduction */
   width: 100%;
   box-sizing: border-box;
   padding: 0 1rem;
