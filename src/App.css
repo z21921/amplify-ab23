@@ -5,6 +5,9 @@
   margin: 0 auto;
   padding: 20px;
   max-width: 1200px;
+  height: 100vh; /* Use full viewport height */
+  box-sizing: border-box;
+  overflow: hidden; /* Prevent scrolling on the main container */
 }
 
 /* Left column - contains all current content */
@@ -12,6 +15,11 @@
   flex: 1;
   max-width: 50%;
   padding-right: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden; /* Prevent scrolling on the column itself */
 }
 
 /* Right column - empty space for future image display */
@@ -54,14 +62,18 @@
   }
 }
 
-/* Position the logout button in the top right corner */
+/* Header and form section - top 2/5 of the left column */
 .header-container {
   position: relative;
-  padding-bottom: 2.5rem;
-  margin: auto;
+  padding: 0 0 0.5rem 0;
+  margin: 0;
   text-align: center;
-  align-items: center;
-  max-width: 48rem;
+  width: 100%;
+  min-height: 40%; /* Take at least 2/5 of the left column height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Distribute space between elements */
+  box-sizing: border-box;
 }
 
 .logout-button {
@@ -75,6 +87,7 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
+  z-index: 10;
 }
 
 .logout-button:hover {
@@ -85,6 +98,8 @@
   font-size: 2.25rem;
   font-weight: bold;
   color: #1a202c;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .main-header .highlight {
@@ -100,12 +115,16 @@
 .description {
   font-weight: 500;
   font-size: 1.125rem;
-  max-width: 65ch;
   color: #1a202c;
+  margin-bottom: 0.5rem;
+  width: 100%;
 }
 
 .form-container {
-  margin-bottom: 20px;
+  width: 100%;
+  margin-top: auto; /* Push to bottom of header container */
+  padding: 0.5rem 1rem;
+  box-sizing: border-box;
 }
 
 .search-container {
@@ -113,6 +132,7 @@
   flex-direction: column;
   gap: 10px;
   align-items: center;
+  width: 100%;
 }
 
 .wide-input {
@@ -140,9 +160,13 @@
 }
 
 .result-container {
-  margin-top: 20px;
-  transition: height 0.3s ease-out;
-  overflow: hidden;
+  margin-top: 10px;
+  flex-grow: 1; /* Take remaining space */
+  overflow-y: auto; /* Add scrolling if needed */
+  max-height: 60%; /* Take at most 3/5 of the left column height */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 1rem;
 }
 
 .loader-container {
