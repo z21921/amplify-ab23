@@ -68,9 +68,10 @@ function App() {
       console.log('Sending request with prompt:', prompt);
       const response = await fetch('https://z94wzq0ef6.execute-api.us-east-1.amazonaws.com/prod/ask', {
         method: 'POST',
+        mode: 'cors', // Explicitly set CORS mode
+        credentials: 'omit', // Don't send cookies
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
