@@ -56,10 +56,7 @@ function App() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          "Access-Control-Allow-Headers" : "Content-Type",
-          "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+          'Accept': 'application/json'
         },
         body: JSON.stringify({
           prompt: {
