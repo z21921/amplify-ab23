@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { Loader, Placeholder } from "@aws-amplify/ui-react";
 import "./App.css";
 import { Amplify } from "aws-amplify";
@@ -17,18 +17,27 @@ const amplifyClient = generateClient<Schema>({
 });
 import { fetchAuthSession } from 'aws-amplify/auth'
 
-const session = await fetchAuthSession();
-const token = session.tokens?.idToken
-
 function App() {
   const [result, setResult] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const { signOut } = useAuthenticator();
+  const [token, setToken] = useState<string | undefined>();
 
   const [prompt, setPrompt] = useState("");
   const [image, setImage] = useState("");
   
-
+  useEffect(() => {
+    const getSession = async () => {
+      try {
+        const session = await fetchAuthSession();
+        setToken(session.tokens?.idToken?.toString());
+      } catch (error) {
+        console.error('Failed to fetch auth session:', error);
+      }
+    };
+    
+    getSession();
+  }, []);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
