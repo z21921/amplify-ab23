@@ -74,7 +74,7 @@ function App() {
         },
         body: JSON.stringify({
           prompt: {
-            text: prompt,
+            text: promptc,
             mode: "OUTPAINTING"
           }
         })
