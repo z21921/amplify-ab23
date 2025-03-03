@@ -57,9 +57,10 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'Access-Control-Allow-Origin': '*',
+          "Access-Control-Allow-Headers" : "Content-Type",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
         },
-        mode: 'cors',
         body: JSON.stringify({
           prompt: {
             text: prompt,
