@@ -7,6 +7,8 @@ import { generateClient } from "aws-amplify/data";
 import outputs from "../amplify_outputs.json";
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import "@aws-amplify/ui-react/styles.css";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 Amplify.configure(outputs);
 
@@ -18,6 +20,11 @@ function App() {
   const [result, setResult] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const { signOut } = useAuthenticator();
+
+  const [prompt, setPrompt] = useState("");
+  const [image, setImage] = useState("");
+  
+
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
@@ -41,7 +48,58 @@ function App() {
       setLoading(false);
     }
   };
+  const generateImage = async () => {
+    setLoading(true);
+    try {
+      console.log('Sending request with prompt:', prompt);
+      const response = await fetch('https://z94wzq0ef6.execute-api.us-east-1.amazonaws.com/prod/ask', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+        mode: 'cors',
+        body: JSON.stringify({
+          prompt: {
+            text: prompt,
+            mode: "OUTPAINTING"
+          }
+        })
+      });
 
+      console.log('Response status:', response.status);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('Response data:', data);
+
+      if (data.base64_image) {
+        setImage(`data:image/png;base64,${data.base64_image}`);
+        toast.success("图片生成成功！");
+      } else {
+        throw new Error('API返回的数据中没有图像');
+      }
+    } catch (error) {
+      console.error('Detailed error:', error);
+      if (error instanceof Error) {
+        if (error.message.includes('Failed to fetch')) {
+          toast.error("无法连接到服务器，请检查网络连接");
+        } else if (error.message.includes('HTTP error')) {
+          toast.error(`服务器错误: ${error.message}`);
+        } else {
+          toast.error(`错误: ${error.message}`);
+        }
+      } else {
+        toast.error("发生未知错误，请重试");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="app-container">
@@ -91,7 +149,27 @@ function App() {
       </div>
       
       <div className="right-column">
-        {/* 图片显示区域 */}
+        <div className="container">
+        <h1>Amazon Bedrock Image Generator</h1>
+        <div className="input-container">
+          <input
+            type="text"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="Enter prompt"
+            className="input-field"
+          />
+          <button
+            onClick={generateImage}
+            className="generate-button"
+            disabled={loading}
+          >
+            {loading ? "Generating..." : "Generate"}
+          </button>
+        </div>
+        {image && <img src={image} alt="Generated" className="generated-image" />}
+        <ToastContainer />
+      </div>
       </div>
     </div>
   );
