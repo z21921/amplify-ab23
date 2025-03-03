@@ -7,7 +7,7 @@ import { generateClient } from "aws-amplify/data";
 import outputs from "../amplify_outputs.json";
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import "@aws-amplify/ui-react/styles.css";
-import axios from "axios";
+
 import { ToastContainer, toast } from "react-toastify";
 
 Amplify.configure(outputs);
