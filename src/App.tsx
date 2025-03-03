@@ -23,7 +23,7 @@ function App() {
   const { signOut } = useAuthenticator();
   const [token, setToken] = useState<string | undefined>();
 
-  const [prompt, setPrompt] = useState("");
+  const [promptc, setPrompt] = useState("");
   const [image, setImage] = useState("");
   
   useEffect(() => {
@@ -65,14 +65,12 @@ function App() {
   const generateImage = async () => {
     setLoading(true);
     try {
-      console.log('Sending request with prompt:', prompt);
+      console.log('Sending request with prompt:', promptc);
       const response = await fetch('https://z94wzq0ef6.execute-api.us-east-1.amazonaws.com/prod/ask', {
         method: 'POST',
-        mode: 'cors', // Explicitly set CORS mode
-        credentials: 'omit', // Don't send cookies
         headers: {
           'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           prompt: {
@@ -168,7 +166,7 @@ function App() {
         <div className="input-container">
           <input
             type="text"
-            value={prompt}
+            value={promptc}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="Enter prompt"
             className="input-field"
