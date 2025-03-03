@@ -72,7 +72,7 @@ function App() {
         credentials: 'omit', // Don't send cookies
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          // 'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           prompt: {
