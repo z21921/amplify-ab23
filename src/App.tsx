@@ -15,6 +15,10 @@ Amplify.configure(outputs);
 const amplifyClient = generateClient<Schema>({
   authMode: "userPool",
 });
+import { fetchAuthSession } from 'aws-amplify/auth'
+
+const session = await fetchAuthSession();
+const token = session.tokens?.idToken
 
 function App() {
   const [result, setResult] = useState<string>("");
@@ -24,6 +28,7 @@ function App() {
   const [prompt, setPrompt] = useState("");
   const [image, setImage] = useState("");
   
+
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -56,7 +61,8 @@ function App() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           prompt: {
