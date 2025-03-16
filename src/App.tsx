@@ -1,4 +1,4 @@
-import { FormEvent, useState, useEffect } from "react";
+import { FormEvent, useState } from "react";
 import { Loader, Placeholder } from "@aws-amplify/ui-react";
 import "./App.css";
 import { Amplify } from "aws-amplify";
@@ -15,30 +15,15 @@ Amplify.configure(outputs);
 const amplifyClient = generateClient<Schema>({
   authMode: "userPool",
 });
-import { fetchAuthSession } from 'aws-amplify/auth'
 
 function App() {
   const [result, setResult] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const { signOut } = useAuthenticator();
-  const [token, setToken] = useState<string | undefined>();
 
   const [promptc, setPrompt] = useState("");
   const [image, setImage] = useState("");
   
-  useEffect(() => {
-    const getSession = async () => {
-      try {
-        const session = await fetchAuthSession();
-        setToken(session.tokens?.idToken?.toString());
-      } catch (error) {
-        console.error('Failed to fetch auth session:', error);
-      }
-    };
-    
-    getSession();
-  }, []);
-
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
@@ -66,34 +51,38 @@ function App() {
     setLoading(true);
     try {
       console.log('Sending request with prompt:', promptc);
-      const response = await fetch('https://z94wzq0ef6.execute-api.us-east-1.amazonaws.com/prod/ask', {
+      const response = await fetch('https://34hyfbof8g.execute-api.us-east-1.amazonaws.com/prod/generate', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          prompt: {
-            text: promptc,
-            mode: "OUTPAINTING"
-          }
+          prompt: promptc
         })
       });
-
+  
       console.log('Response status:', response.status);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+  
       const data = await response.json();
       console.log('Response data:', data);
-
-      if (data.base64_image) {
-        setImage(`data:image/png;base64,${data.base64_image}`);
-        toast.success("图片生成成功！");
+  
+      // 解析嵌套的 JSON 字符串
+      if (data.body) {
+        // body 是字符串形式的 JSON，需要解析
+        const bodyData = JSON.parse(data.body);
+        
+        if (bodyData.base64_image) {
+          setImage(`data:image/png;base64,${bodyData.base64_image}`);
+          toast.success("图片生成成功！");
+        } else {
+          throw new Error('API返回的数据中没有图像');
+        }
       } else {
-        throw new Error('API返回的数据中没有图像');
+        throw new Error('API返回的数据格式不正确');
       }
     } catch (error) {
       console.error('Detailed error:', error);
@@ -102,6 +91,8 @@ function App() {
           toast.error("无法连接到服务器，请检查网络连接");
         } else if (error.message.includes('HTTP error')) {
           toast.error(`服务器错误: ${error.message}`);
+        } else if (error.message.includes('Unexpected token')) {
+          toast.error("解析服务器响应时出错");
         } else {
           toast.error(`错误: ${error.message}`);
         }
@@ -112,6 +103,7 @@ function App() {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="app-container">
@@ -162,7 +154,7 @@ function App() {
       
       <div className="right-column">
         <div className="container">
-        <h1>Amazon Bedrock Image Generator</h1>
+        <h1 className="generator-title">Amazon Bedrock Image Generator</h1>
         <div className="input-container">
           <input
             type="text"
