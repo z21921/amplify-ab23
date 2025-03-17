@@ -153,27 +153,27 @@ function App() {
       </div>
       
       <div className="right-column">
-        <div className="container">
         <h1 className="generator-title">Amazon Bedrock Image Generator</h1>
-        <div className="input-container">
-          <input
-            type="text"
-            value={promptc}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Enter prompt"
-            className="input-field"
-          />
-          <button
-            onClick={generateImage}
-            className="generate-button"
-            disabled={loading}
-          >
-            {loading ? "Generating..." : "Generate"}
-          </button>
+        <div className="container">
+          <div className="input-container">
+            <input
+              type="text"
+              value={promptc}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="Enter prompt"
+              className="input-field"
+            />
+            <button
+              onClick={generateImage}
+              className="generate-button"
+              disabled={loading}
+            >
+              {loading ? "Generating..." : "Generate"}
+            </button>
+          </div>
+          {image && <img src={image} alt="Generated" className="generated-image" />}
+          <ToastContainer />
         </div>
-        {image && <img src={image} alt="Generated" className="generated-image" />}
-        <ToastContainer />
-      </div>
       </div>
     </div>
   );
