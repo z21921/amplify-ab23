@@ -19,6 +19,7 @@ const amplifyClient = generateClient<Schema>({
 function App() {
   const [result, setResult] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
   const { signOut } = useAuthenticator();
 
   const [promptc, setPrompt] = useState("");
@@ -48,7 +49,7 @@ function App() {
     }
   };
   const generateImage = async () => {
-    setLoading(true);
+    setLoading2(true);
     try {
       console.log('Sending request with prompt:', promptc);
       const response = await fetch('https://34hyfbof8g.execute-api.us-east-1.amazonaws.com/prod/generate', {
@@ -100,11 +101,10 @@ function App() {
         toast.error("发生未知错误，请重试");
       }
     } finally {
-      setLoading(false);
+      setLoading2(false);
     }
   };
   
-
   return (
     <div className="app-container">
       <div className="left-column">
@@ -121,7 +121,6 @@ function App() {
             <button onClick={signOut} className="logout-button">
               退出
             </button>
-          
         </div>
         <form onSubmit={onSubmit} className="form-container">
           <div className="search-container">
@@ -168,11 +167,18 @@ function App() {
               className="generate-button"
               disabled={loading}
             >
-              {loading ? "Generating..." : "Generate"}
+              {loading2 ? "Generating..." : "Generate"}
             </button>
           </div>
           {image && <img src={image} alt="Generated" className="generated-image" />}
           <ToastContainer />
+        </div>
+      </div>
+      
+      <div className="bottom-section">
+        <h1 className="s3-browser-title">S3 图片浏览器</h1>
+        <div className="s3-image-grid">
+          <p>S3 桶图片浏览区域 - 待实现</p>
         </div>
       </div>
     </div>
