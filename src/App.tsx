@@ -115,7 +115,7 @@ function App() {
             <span className="highlight">AB23 AI</span>
           </h1>
           <p className="description">
-            简单输入问题， AB23 AI 将会生成图片
+            简单输入描述， 将会生成图片
           </p>
           
             <button onClick={signOut} className="logout-button">
