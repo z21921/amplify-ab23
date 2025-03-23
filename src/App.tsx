@@ -7,7 +7,9 @@ import { generateClient } from "aws-amplify/data";
 import outputs from "../amplify_outputs.json";
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import "@aws-amplify/ui-react/styles.css";
-
+// import { StorageImage } from '@aws-amplify/ui-react-storage';
+import { Image } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
 import { ToastContainer, toast } from "react-toastify";
 
 Amplify.configure(outputs);
@@ -105,6 +107,18 @@ function App() {
     }
   };
   
+  const generateImageUrls = (count: number) => {
+    const baseUrl = "https://comfyui-outputs-861276080516-us-east-1.s3.us-east-1.amazonaws.com/";
+    const urls = [];
+    for (let i = count; i >= count-10; i--) {
+      const paddedIndex = String(i).padStart(5, '0'); // Pad the index to 5 digits
+      urls.push(`${baseUrl}ComfyUI_${paddedIndex}_.png`);
+    }
+    return urls;
+  };
+
+  const imageUrls = generateImageUrls(30); // Generate URLs for the latest 10 images
+
   return (
     <div className="app-container">
       <div className="left-column">
@@ -178,7 +192,16 @@ function App() {
       <div className="bottom-section">
         <h1 className="s3-browser-title">S3 图片浏览器</h1>
         <div className="s3-image-grid">
-          <p>S3 桶图片浏览区域 - 待实现</p>
+          {imageUrls.map((url, index) => (
+            <Image
+              key={index}
+              alt={`Abstract art ${index + 1}`}
+              height="auto"
+              width="100%"
+              objectFit="cover"
+              src={url}
+            />
+          ))}
         </div>
       </div>
     </div>
